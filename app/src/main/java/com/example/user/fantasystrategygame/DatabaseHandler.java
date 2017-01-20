@@ -1,9 +1,13 @@
 package com.example.user.fantasystrategygame;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -137,6 +141,50 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    public void
+    public List<Domain> getAllFreeDomains(){
+
+        List<Domain> freeDomainList = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_AVAILABLE_DOMAINS;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = Integer.parseInt(cursor.getString(0));
+                String domainName = cursor.getString(1);
+                int domainSize = Integer.parseInt(cursor.getString(2));
+                Domain domain = new Domain(id, domainName, domainSize);
+
+                // Adding domain to list
+                freeDomainList.add(domain);
+            } while (cursor.moveToNext());
+        }
+        return freeDomainList;
+    }
+
+    public list<Domain> getAllHeldDomains(){
+        list<Domain> heldDomainList = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_HELD_DOMAINS;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                int id = Integer.parseInt(cursor.getString(0));
+                String domainName = cursor.getString(1);
+                int domainSize = Integer.parseInt(cursor.getString(2));
+                String buildings = cursor.getString(3);
+
+                Domain heldDomain = new Domain(id, domainName, domainSize, buildings);
+
+                heldDomainList.add(heldDomain);
+            } while (cursor.moveToNext());
+        }
+        return heldDomainList;
+    }
+
+
 
 }
